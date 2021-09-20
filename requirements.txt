@@ -13,3 +13,4 @@ pydub
 piano_transcription_inference
 ffmpeg-python
 wget
+youtube_dl
