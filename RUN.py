@@ -18,17 +18,17 @@ import os
 import shutil
 from pathlib import Path
 d = os.path.dirname(os.path.realpath(__file__))
-Input = d + "/Input"
-Output = d + "/Output"
+Input = os.path.join(d, "Input")
+Output = os.path.join(d, "Output")
 home = os.path.expanduser('~')
 
-if not os.path.isdir(home + "/piano_transcription_inference_data"):
+if not os.path.isdir(os.path.join(home, "piano_transcription_inference_data")):
     #os.mkdir(home + "/piano_transcription_inference_data")
-    src = d + "/piano_transcription_inference_data"
-    dest = home + "/piano_transcription_inference_data"
+    src = os.path.join(d, "piano_transcription_inference_data")
+    dest = os.path.join(home, "piano_transcription_inference_data")
     shutil.copytree(src, dest)
 
-requirements = d + "/requirements.txt"
+requirements = os.path.join(d, "requirements.txt")
 req_install(requirements)
 
 from piano_transcription_inference import PianoTranscription, sample_rate, load_audio
@@ -65,7 +65,7 @@ ydl_opts = {
     },
     {'key' : 'EmbedThumbnail'}
     ],
-    'outtmpl': Input + '/%(title)s - %(channel)s.%(ext)s',
+    'outtmpl': os.path.join(Input, '%(title)s - %(channel)s.%(ext)s'),
     'logger': MyLogger(),
     'progress_hooks': [my_hook]
 }
@@ -111,7 +111,7 @@ for path in os.listdir(Input):
         # Transcribe and write out to MIDI file
         true_name = os.path.splitext(path)
         true_name = true_name[0]
-        Output_name = str(Output) + "/" + str(true_name) + ".mid"
+        Output_name = os.path.join(str(Output), str(true_name)) + ".mid"
         transcribed_dict = transcriptor.transcribe(audio, Output_name)
 
         # Remove CONVERTED MP3 audio files for this instance
