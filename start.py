@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import re
 import subprocess
 import sys
@@ -17,8 +18,8 @@ import os
 import shutil
 from pathlib import Path
 d = os.path.dirname(os.path.realpath(__file__))
-input = d + "/Input"
-output = d + "/Output"
+Input = d + "/Input"
+Output = d + "/Output"
 home = os.path.expanduser('~')
 
 if not os.path.isdir(home + "/piano_transcription_inference_data"):
@@ -36,10 +37,48 @@ import ffmpeg
 import torch
 from pydub import AudioSegment
 
+import youtube_dl
 
-for path in os.listdir(input):
+class MyLogger(object):
+    def debug(self, msg):
+        pass
+
+    def warning(self, msg):
+        pass
+
+    def error(self, msg):
+        print(msg)
+
+
+def my_hook(d):
+    if d['status'] == 'finished':
+        print('Done downloading, now converting ...')
+
+ydl_opts = {
+    'format': 'bestaudio/best',
+    'writethumbnail' : True,
+    'addmetadata' : True,
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    },
+    {'key' : 'EmbedThumbnail'}
+    ],
+    'outtmpl': Input + '/%(title)s - %(channel)s.%(ext)s',
+    'logger': MyLogger(),
+    'progress_hooks': [my_hook]
+}
+
+Links = input("Enter youtube URLs, separated with a comma and a space, that you want to download and render: ")
+Links = Links.split(", ")
+with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    for x in Links:
+            ydl.download([x])
+
+for path in os.listdir(Input):
     if not path.startswith("."):        # IGNORE .DS_STORE or any system files
-        full_path = os.path.join(input,path)
+        full_path = os.path.join(Input,path)
         print("\n" + str(full_path) + "\n")
         
         # Convert to mp3 audio type
@@ -69,8 +108,8 @@ for path in os.listdir(input):
         # Transcribe and write out to MIDI file
         true_name = os.path.splitext(path)
         true_name = true_name[0]
-        output_name = str(output) + "/" + str(true_name) + ".mid"
-        transcribed_dict = transcriptor.transcribe(audio, output_name)
+        Output_name = str(Output) + "/" + str(true_name) + ".mid"
+        transcribed_dict = transcriptor.transcribe(audio, Output_name)
 
         # Remove CONVERTED MP3 audio files for this instance
         try:
