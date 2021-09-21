@@ -16,7 +16,7 @@ ByteDance: https://github.com/bytedance/piano_transcription
 2. Drag any audio file to the **Input** folder.
 3. Or you can follow the instructions in command line and directly render Youtube URLs. (Pretty handy right?)
 4. Open terminal and type **python3.7** then press **SPACE**
-5. Drag **setup.py** and press **ENTER**
+5. Drag **RUN.py** and press **ENTER**
 6. MIDI will be exported to the **Output** folder.
 7. Currently, the python script will automatically remove the audio files in Input to save storage.
 
