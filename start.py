@@ -70,7 +70,7 @@ ydl_opts = {
     'progress_hooks': [my_hook]
 }
 
-Links = input("Enter youtube URLs, separated with a comma and a space, that you want to download and render: ")
+Links = input("Enter youtube URLs, separated with a comma and a space, that you want to download and render. If not, just type any random stuff and press ENTER: ")
 Links = Links.split(", ")
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     for x in Links:
