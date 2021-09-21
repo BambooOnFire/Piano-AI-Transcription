@@ -22,6 +22,6 @@ ByteDance: https://github.com/bytedance/piano_transcription
 
 # Examples
 
-The Input and Output folder in this repo already contains an example render of Jonny May's amazing Happy Birthday Jazz piano cover.
+The Input and Output folder in this repo already contains an example render of Charles Cornell's sexy "Heart and Soul" jazz piano performance.
 
 The output file is in MIDI format and you can use any DAW and VST to render the audio yourself.
