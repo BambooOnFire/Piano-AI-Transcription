@@ -1,6 +1,6 @@
 # Piano-AI-Transcription
 
-This is a simple Python "wrapper" that utilizes ByteDance's amazing polyphonic transcription tool. The model is not widely-known but it is definitely a powerful tool. In my opinion, no other models beat this.
+This is a simple Python "wrapper" that utilizes ByteDance's amazing polyphonic transcription tool. The model is not widely-known but it definitely is a powerful tool. In my opinion, no other models beat this. It supports 1) Correct timing, 2) Correct MIDI velocity, 3) Partially correct sustain points.
 
 It also just supports direct YouTube URL input so you don't have to use shady sites to download audio.
 
