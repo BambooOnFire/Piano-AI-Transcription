@@ -2,7 +2,7 @@
 
 This is a simple Python "wrapper" that utilizes ByteDance's amazing polyphonic transcription tool. The model is not widely-known but it is definitely a powerful tool. In my opinion, no other models beat this.
 
-This repo is just a tool that handles all the complicated requirements and allows you render multiple audio formats.
+It also just supports direct YouTube URL input so you don't have to use shady sites to download audio.
 
 I plan to add a youtube download module later so users can simply copy the link and let the tool handle the rest.
 
