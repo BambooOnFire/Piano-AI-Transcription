@@ -74,7 +74,10 @@ Links = input("Enter youtube URLs, separated with a comma and a space, that you 
 Links = Links.split(", ")
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     for x in Links:
+        try:
             ydl.download([x])
+        except:
+            pass
 
 for path in os.listdir(Input):
     if not path.startswith("."):        # IGNORE .DS_STORE or any system files
