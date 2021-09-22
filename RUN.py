@@ -95,57 +95,55 @@ if any(x in youtube for x in yes):
 
 for path in os.listdir(Input):
     full_path = os.path.join(Input,path)
-    if not path.startswith("."):        # IGNORE .DS_STORE or any non-Audio files
-        if sndhdr.what(full_path) is not None:
-            print("\n" + 'RENDERING: ' + str(full_path) + "\n")
-            
-            # Convert to mp3 audio type
-            if not full_path.endswith('.mp3'):
-                audio_path = Path(full_path)
-                raw_audio = AudioSegment.from_file(audio_path)
-                export_path = full_path[:-4] + "_CONVERTED.mp3"
-                try:
-                    raw_audio.export(export_path, format="mp3")
-                    os.remove(full_path)
-                    print("CONVERSION Successful")
-                    full_path = export_path
-                except:
-                    print("CONVERSION Error")
+    if not path.startswith("."):        # IGNORE .DS_STORE
+        print("\n" + 'RENDERING: ' + str(path) + "\n")
         
-            # Load audio
-            (audio, _) = load_audio(full_path, sr=sample_rate, mono=True)
-
-            # Transcriptor
-            if torch.cuda.is_available():
-                transcriptor = PianoTranscription(device='cuda')    # 'cuda' | 'cpu'
-                print("\n- - - - CUDA Transcriptor - - - -")
-            else:
-                transcriptor = PianoTranscription(device='cpu')    # 'cuda' | 'cpu'
-                print("\n- - - - CPU Transcriptor - - - -")
-
-            # Transcribe and write out to MIDI file
-            true_name = os.path.splitext(path)
-            true_name = true_name[0]
-            Output_name = os.path.join(str(Output), str(true_name)) + ".mid"
+        # Convert to mp3 audio type
+        if not full_path.endswith('.mp3'):
+            audio_path = Path(full_path)
+            raw_audio = AudioSegment.from_file(audio_path)
+            export_path = full_path[:-4] + "_CONVERTED.mp3"
             try:
-                transcribed_dict = transcriptor.transcribe(audio, Output_name)
-                
-                # Remove CONVERTED MP3 audio files for this instance
-                try:
-                    os.remove(full_path)
-                    print("[{NAME}] audio file removed successfully!".format(NAME=true_name))
-                except:
-                    print("[{NAME}] file was already removed.".format(NAME=true_name))
-            except:
-                print("[{NAME}] file FAILED!".format(NAME=true_name))
-                pass
-        else:
-            nonaudio_name = os.path.splitext(path)
-            nonaudio_name = nonaudio_name[0]
-            print("[{File}] is most likely NOT an AUDIO file!".format(File=nonaudio_name))
-            remove = input("Do you wish to remove the non-audio file?: ")
-            if any(x in remove for x in yes):
+                raw_audio.export(export_path, format="mp3")
                 os.remove(full_path)
+                print("CONVERSION Successful")
+                full_path = export_path
+            except:
+                print("CONVERSION Error\n")
+                nonaudio_name = os.path.splitext(path)
+                nonaudio_name = nonaudio_name[0]
+                print("[{File}] is most likely NOT an AUDIO file!".format(File=path))
+                remove = input("Do you wish to remove the non-audio file?: ")
+                if any(x in remove for x in yes):
+                    os.remove(full_path)
+    
+        # Load audio
+        (audio, _) = load_audio(full_path, sr=sample_rate, mono=True)
+
+        # Transcriptor
+        if torch.cuda.is_available():
+            transcriptor = PianoTranscription(device='cuda')    # 'cuda' | 'cpu'
+            print("\n- - - - CUDA Transcriptor - - - -")
+        else:
+            transcriptor = PianoTranscription(device='cpu')    # 'cuda' | 'cpu'
+            print("\n- - - - CPU Transcriptor - - - -")
+
+        # Transcribe and write out to MIDI file
+        true_name = os.path.splitext(path)
+        true_name = true_name[0]
+        Output_name = os.path.join(str(Output), str(true_name)) + ".mid"
+        try:
+            transcribed_dict = transcriptor.transcribe(audio, Output_name)
+            
+            # Remove CONVERTED MP3 audio files for this instance
+            try:
+                os.remove(full_path)
+                print("[{NAME}] audio file removed successfully!".format(NAME=true_name))
+            except:
+                print("[{NAME}] file was already removed.".format(NAME=true_name))
+        except:
+            print("[{NAME}] file FAILED!".format(NAME=true_name))
+            pass
 
 
 
