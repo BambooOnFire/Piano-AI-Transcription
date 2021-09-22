@@ -112,14 +112,18 @@ for path in os.listdir(Input):
         true_name = os.path.splitext(path)
         true_name = true_name[0]
         Output_name = os.path.join(str(Output), str(true_name)) + ".mid"
-        transcribed_dict = transcriptor.transcribe(audio, Output_name)
-
-        # Remove CONVERTED MP3 audio files for this instance
         try:
-            os.remove(full_path)
-            print("[{NAME}] audio file removed successfully!".format(NAME=true_name))
+            transcribed_dict = transcriptor.transcribe(audio, Output_name)
+            
+            # Remove CONVERTED MP3 audio files for this instance
+            try:
+                os.remove(full_path)
+                print("[{NAME}] audio file removed successfully!".format(NAME=true_name))
+            except:
+                print("[{NAME}] file was already removed.".format(NAME=true_name))
         except:
-            print("[{NAME}] file was already removed.".format(NAME=true_name))
+            print("[{NAME}] file FAILED!".format(NAME=true_name))
+            pass
 
 
 
