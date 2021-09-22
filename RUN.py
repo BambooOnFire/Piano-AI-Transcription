@@ -12,7 +12,12 @@ def req_install(PATH):
 def pip_install():
     subprocess.check_call([sys.executable, "-m", "ensurepip", "--upgrade"])
 
-pip_install()
+pip = subprocess.check_output([sys.executable, '-m', 'pip', '--version']).decode('UTF-8')
+
+matches = ['pip', 'from', 'python']
+
+if not all(x in pip for x in matches):
+    pip_install()
 
 import os
 import shutil
@@ -24,20 +29,23 @@ home = os.path.expanduser('~')
 
 if not os.path.isdir(os.path.join(home, "piano_transcription_inference_data")):
     #os.mkdir(home + "/piano_transcription_inference_data")
+    # '{}/piano_transcription_inference_data/note_F1=0.9677_pedal_F1=0.9186.pth'.format(str(Path.home()))
     src = os.path.join(d, "piano_transcription_inference_data")
     dest = os.path.join(home, "piano_transcription_inference_data")
     shutil.copytree(src, dest)
 
 requirements = os.path.join(d, "requirements.txt")
-req_install(requirements)
+# req_install(requirements)
 
-from piano_transcription_inference import PianoTranscription, sample_rate, load_audio
-from numpy.core.numeric import full
-import ffmpeg
-import torch
-from pydub import AudioSegment
-
-import youtube_dl
+try:
+    from piano_transcription_inference import PianoTranscription, sample_rate, load_audio
+    from numpy.core.numeric import full
+    import ffmpeg
+    import torch
+    from pydub import AudioSegment
+    import youtube_dl
+except:
+    req_install(requirements)
 
 class MyLogger(object):
     def debug(self, msg):
@@ -63,7 +71,8 @@ ydl_opts = {
         'preferredcodec': 'mp3',
         'preferredquality': '192',
     },
-    {'key' : 'EmbedThumbnail'}
+    {'key' : 'EmbedThumbnail'},
+    {'key': 'FFmpegMetadata'}
     ],
     'outtmpl': os.path.join(Input, '%(title)s - %(channel)s.%(ext)s'),
     'logger': MyLogger(),
@@ -103,10 +112,10 @@ for path in os.listdir(Input):
         # Transcriptor
         if torch.cuda.is_available():
             transcriptor = PianoTranscription(device='cuda')    # 'cuda' | 'cpu'
-            print("\n- - - - CUDA - - - -")
+            print("\n- - - - CUDA Transcriptor - - - -")
         else:
             transcriptor = PianoTranscription(device='cpu')    # 'cuda' | 'cpu'
-            print("\n- - - - CPU - - - -")
+            print("\n- - - - CPU Transcriptor - - - -")
 
         # Transcribe and write out to MIDI file
         true_name = os.path.splitext(path)
