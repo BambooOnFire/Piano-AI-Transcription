@@ -84,7 +84,7 @@ Links = Links.split(", ")
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     for x in Links:
         try:
-            ydl.download([x])           # If Certificate Error pops up, https://stackoverflow.com/questions/42098126/mac-osx-python-ssl-sslerror-ssl-certificate-verify-failed-certificate-verify
+            ydl.download([x])           # If Certificate Error pops up on OSX, https://stackoverflow.com/questions/42098126/mac-osx-python-ssl-sslerror-ssl-certificate-verify-failed-certificate-verify
         except:
             pass
 
