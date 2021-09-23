@@ -55,6 +55,13 @@ try:
     print("All modules are already installed. Good!")
 except:
         req_install(requirements)
+        import youtube_dl
+        from piano_transcription_inference import PianoTranscription, sample_rate, load_audio
+        from numpy.core.numeric import full
+        import ffmpeg
+        import torch
+        from pydub import AudioSegment
+        print("All modules are ready to go!")
 
 class MyLogger(object):
     def debug(self, msg):
