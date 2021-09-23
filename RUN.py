@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.7
 from __future__ import unicode_literals
 import re
 import subprocess
@@ -45,18 +46,14 @@ requirements = os.path.join(d, "requirements.txt")
 # req_install(requirements)
 
 try:
+    import youtube_dl
     from piano_transcription_inference import PianoTranscription, sample_rate, load_audio
     from numpy.core.numeric import full
     import ffmpeg
     import torch
     from pydub import AudioSegment
-    import youtube_dl
 except:
-    try:
         req_install(requirements)
-    except:
-        print("Modules failed to install.") # Possible error handler. However, I believe pip modules should work with most common OS.
-        pass
 
 class MyLogger(object):
     def debug(self, msg):
@@ -159,6 +156,6 @@ for path in os.listdir(Input):
 
 ## PATH = /Library/Frameworks/Python.framework/Versions/3.7/bin
 ## export PATH="/Library/Frameworks/Python.framework/Versions/3.7/bin"
-## source ~/.bash_prfile
+## source ~/.bash_profile
 
 ## SOURCE FILE AND DATASET: https://github.com/bytedance/piano_transcription
