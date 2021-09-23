@@ -46,7 +46,11 @@ try:
     from pydub import AudioSegment
     import youtube_dl
 except:
-    req_install(requirements)
+    try:
+        req_install(requirements)
+    except:
+        print("Modules failed to install.") # Possible error handler. However, I believe pip modules should work with most common OS.
+        pass
 
 class MyLogger(object):
     def debug(self, msg):
