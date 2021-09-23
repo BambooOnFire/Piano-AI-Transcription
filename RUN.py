@@ -3,6 +3,7 @@ import re
 import subprocess
 import sys
 import sndhdr
+import os
 
 def install(MODULE):
     subprocess.check_call([sys.executable, "-m", "pip", "install", MODULE])
@@ -17,10 +18,15 @@ pip = subprocess.check_output([sys.executable, '-m', 'pip', '--version']).decode
 
 matches = ['pip', 'from', 'python']
 
+if 'inux' in sys.platform:
+    os.system('echo export PYTHONPATH="$PYTHONPATH:~/lib/python2.7/site-packages/" >> ~/.bash_profile')
+    os.system('source ~/.bash_profile')
+    os.system('echo export PYTHONPATH="$PYTHONPATH:~/lib/python3.7/site-packages/" >> ~/.bash_profile')
+    os.system('source ~/.bash_profile')
+
 if not all(x in pip for x in matches):
     pip_install()
 
-import os
 import shutil
 from pathlib import Path
 d = os.path.dirname(os.path.realpath(__file__))
